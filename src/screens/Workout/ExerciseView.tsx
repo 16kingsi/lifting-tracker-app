@@ -4,7 +4,7 @@ import type { ActiveWorkout } from '../../db/queries';
 import { deleteSet, logSet, updateSet } from '../../db/workouts';
 import { formatDate, summarizeSets } from '../../lib/format';
 import type { LastTime } from '../../lib/lastTime';
-import { prefill } from '../../lib/prefill';
+import { draftFromSet, prefill } from '../../lib/prefill';
 import { useBackStep } from '../../router';
 import type { Draft, Exercise, LoggedSet } from '../../types';
 import { EntryPanel } from './EntryPanel';
@@ -47,7 +47,9 @@ export function ExerciseView({ workout, exercise, index, lastTime }: ExerciseVie
   const setNumber = editingIndex >= 0 ? editingIndex + 1 : todaySets.length + 1;
   const isTimed = exercise.type === 'timed';
   const canLog = isTimed ? draft.seconds > 0 : draft.reps > 0;
-  const lastLoggedAt = allSets.length > 0 ? Math.max(...allSets.map((s) => s.loggedAt)) : null;
+  const lastLoggedAt = Math.max(0, ...allSets.map((s) => s.loggedAt));
+  // After reopening a workout, the rest timer waits for a new set.
+  const showRest = lastLoggedAt > (session.reopened?.at ?? 0);
 
   // Keep the newest set in view as the list grows.
   const listRef = useRef<HTMLElement>(null);
@@ -78,11 +80,7 @@ export function ExerciseView({ workout, exercise, index, lastTime }: ExerciseVie
   }
 
   function startEditing(set: LoggedSet) {
-    const fromSet =
-      set.kind === 'weight'
-        ? { reps: set.reps, weight: set.weightValue, unit: set.weightUnit }
-        : { seconds: set.durationSec };
-    setDraft({ ...draft, ...fromSet, note: set.note });
+    setDraft(draftFromSet(set, draft));
     setEditingId(set.id);
     setSelectedId(null);
     setStopwatchOpen(false);
@@ -152,7 +150,7 @@ export function ExerciseView({ workout, exercise, index, lastTime }: ExerciseVie
                 </span>
               </div>
             )}
-            {lastLoggedAt !== null && <RestTimer since={lastLoggedAt} />}
+            {showRest && <RestTimer since={lastLoggedAt} />}
           </section>
 
           <EntryPanel

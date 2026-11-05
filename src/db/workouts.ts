@@ -1,5 +1,6 @@
 // Functions that change workouts. Every one writes to the database straight away,
 // so closing the app at any moment loses nothing that has been logged.
+import { finishTime } from '../lib/sessionTime';
 import type { Draft, Exercise, ExerciseType, LoggedSet, PlanItem, Session, TemplateId } from '../types';
 import { db } from './schema';
 
@@ -23,21 +24,40 @@ export async function startSession(templateId: TemplateId): Promise<void> {
 
 // Completes a workout. One with no logged sets is dropped instead, so an empty
 // workout doesn't appear in history or change which day is suggested next.
-export async function finishSession(sessionId: string): Promise<void> {
+export async function finishSession(session: Session): Promise<void> {
   await db.transaction('rw', db.sessions, db.sets, async () => {
-    const setCount = await db.sets.where('sessionId').equals(sessionId).count();
+    const setCount = await db.sets.where('sessionId').equals(session.id).count();
     if (setCount === 0) {
-      await db.sessions.delete(sessionId);
+      await db.sessions.delete(session.id);
     } else {
-      await db.sessions.update(sessionId, { finishedAt: Date.now() });
+      await db.sessions.update(session.id, {
+        finishedAt: finishTime(session, Date.now()),
+        reopened: undefined,
+      });
     }
   });
 }
 
+// Deletes a workout and every set in it, finished or not.
 export async function discardSession(sessionId: string): Promise<void> {
   await db.transaction('rw', db.sessions, db.sets, async () => {
     await db.sets.where('sessionId').equals(sessionId).delete();
     await db.sessions.delete(sessionId);
+  });
+}
+
+// Puts a finished workout back in progress, unless another one already is.
+export async function reopenSession(sessionId: string): Promise<boolean> {
+  return db.transaction('rw', db.sessions, async () => {
+    const active = await db.sessions.filter((s) => s.finishedAt === null).first();
+    const session = await db.sessions.get(sessionId);
+    if (active || !session?.finishedAt) return false;
+
+    await db.sessions.update(sessionId, {
+      finishedAt: null,
+      reopened: { at: Date.now(), previousFinishedAt: session.finishedAt },
+    });
+    return true;
   });
 }
 
@@ -92,10 +112,20 @@ export async function deleteSet(setId: string): Promise<void> {
   await db.sets.delete(setId);
 }
 
+// Deletes a set from a finished workout. A workout left with no sets goes too, the
+// same as one finished with no sets.
+export async function deleteFinishedSet(set: LoggedSet): Promise<void> {
+  await db.transaction('rw', db.sessions, db.sets, async () => {
+    await db.sets.delete(set.id);
+    const remaining = await db.sets.where('sessionId').equals(set.sessionId).count();
+    if (remaining === 0) await db.sessions.delete(set.sessionId);
+  });
+}
+
 // Either an exercise that already exists, or a new one to create.
 export type ExerciseChoice = { id: string } | { name: string; type: ExerciseType };
 
-async function resolveExercise(choice: ExerciseChoice): Promise<string> {
+export async function resolveExercise(choice: ExerciseChoice): Promise<string> {
   if ('id' in choice) return choice.id;
   const exercise: Exercise = { id: crypto.randomUUID(), name: choice.name, type: choice.type };
   await db.exercises.add(exercise);

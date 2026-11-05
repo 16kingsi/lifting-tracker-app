@@ -32,6 +32,23 @@ export function formatLongDate(timestamp: number): string {
   });
 }
 
+// "October 2026"
+export function formatMonth(timestamp: number): string {
+  return new Date(timestamp).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+}
+
+// "1 set", "12 sets"
+export function plural(count: number, noun: string): string {
+  return `${count} ${noun}${count === 1 ? '' : 's'}`;
+}
+
+// A single set: "8 × 95 lb" or "0:45"
+export function formatSet(set: LoggedSet): string {
+  return set.kind === 'timed'
+    ? formatDuration(set.durationSec)
+    : `${set.reps} × ${set.weightValue} ${set.weightUnit}`;
+}
+
 // One line describing a group of sets, for "Last time":
 // "3 × 8 @ 95 lb", "8, 8, 7 @ 90 lb", "8 × 95 lb, 6 × 40 kg", "2 × 0:45"
 export function summarizeSets(sets: LoggedSet[]): string {
@@ -57,13 +74,7 @@ export function summarizeSets(sets: LoggedSet[]): string {
   }
 
   // Only possible if an exercise's type was changed partway through a workout.
-  return sets
-    .map((s) =>
-      s.kind === 'timed'
-        ? formatDuration(s.durationSec)
-        : `${s.reps} × ${s.weightValue} ${s.weightUnit}`,
-    )
-    .join(', ');
+  return sets.map(formatSet).join(', ');
 }
 
 function allSame<T>(values: T[]): boolean {

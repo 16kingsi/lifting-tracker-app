@@ -45,34 +45,65 @@ export async function getLastTime(exerciseId: string): Promise<LastTime | null> 
   return pickLastTime(sets, sessions.filter((s) => s !== undefined));
 }
 
-export interface SwapOption {
+export interface ExerciseOption {
   exercise: Exercise;
   lastTime: LastTime | null;
 }
 
-// Every exercise that isn't already in today's workout. Most recently used first,
-// then the ones never logged, by name.
-export async function getSwapOptions(excludeIds: string[]): Promise<SwapOption[]> {
+export interface ExerciseOptions {
+  options: ExerciseOption[];
+  takenNames: string[]; // every exercise's name in lower case, so none is created twice
+}
+
+// Every exercise that isn't excluded. Most recently used first, then the ones never
+// logged, by name.
+export async function getExerciseOptions(excludeIds: string[]): Promise<ExerciseOptions> {
   const [exercises, sets, sessions] = await Promise.all([
     db.exercises.toArray(),
     db.sets.toArray(),
     db.sessions.toArray(),
   ]);
 
-  return exercises
-    .filter((exercise) => !excludeIds.includes(exercise.id))
-    .map((exercise) => ({
-      exercise,
-      lastTime: pickLastTime(
-        sets.filter((s) => s.exerciseId === exercise.id),
-        sessions,
+  return {
+    takenNames: exercises.map((e) => e.name.toLowerCase()),
+    options: exercises
+      .filter((exercise) => !excludeIds.includes(exercise.id))
+      .map((exercise) => ({
+        exercise,
+        lastTime: pickLastTime(
+          sets.filter((s) => s.exerciseId === exercise.id),
+          sessions,
+        ),
+      }))
+      .sort(
+        (a, b) =>
+          (b.lastTime?.finishedAt ?? 0) - (a.lastTime?.finishedAt ?? 0) ||
+          a.exercise.name.localeCompare(b.exercise.name),
       ),
-    }))
-    .sort(
-      (a, b) =>
-        (b.lastTime?.finishedAt ?? 0) - (a.lastTime?.finishedAt ?? 0) ||
-        a.exercise.name.localeCompare(b.exercise.name),
-    );
+  };
+}
+
+export interface FinishedWorkout {
+  session: Session;
+  sets: LoggedSet[];
+}
+
+// Completed workouts, newest first, with their sets.
+async function getFinishedWorkouts(sessions: Session[], limit = Infinity): Promise<FinishedWorkout[]> {
+  const finished = sessions
+    .filter((s) => s.finishedAt !== null)
+    .sort((a, b) => (b.finishedAt ?? 0) - (a.finishedAt ?? 0))
+    .slice(0, limit);
+
+  const sets = await db.sets
+    .where('sessionId')
+    .anyOf(finished.map((s) => s.id))
+    .toArray();
+
+  return finished.map((session) => ({
+    session,
+    sets: sets.filter((s) => s.sessionId === session.id),
+  }));
 }
 
 export interface HomeData {
@@ -81,7 +112,10 @@ export interface HomeData {
   templates: Template[];
   exercisesById: Map<string, Exercise>;
   finished: Session[]; // completed workouts, newest first
+  recent: FinishedWorkout[]; // the newest few, with their sets
 }
+
+const RECENT_COUNT = 3;
 
 export async function loadHome(): Promise<HomeData> {
   const [sessions, templates, exercises] = await Promise.all([
@@ -101,5 +135,38 @@ export async function loadHome(): Promise<HomeData> {
     finished: sessions
       .filter((s) => s.finishedAt !== null)
       .sort((a, b) => (b.finishedAt ?? 0) - (a.finishedAt ?? 0)),
+    recent: await getFinishedWorkouts(sessions, RECENT_COUNT),
   };
+}
+
+export interface HistoryData {
+  workouts: FinishedWorkout[];
+  exercisesById: Map<string, Exercise>;
+  hasActiveWorkout: boolean;
+  settings: Settings;
+}
+
+export async function loadHistory(): Promise<HistoryData> {
+  const [sessions, exercises, settings] = await Promise.all([
+    db.sessions.toArray(),
+    db.exercises.toArray(),
+    getSettings(),
+  ]);
+
+  return {
+    workouts: await getFinishedWorkouts(sessions),
+    exercisesById: new Map(exercises.map((e) => [e.id, e])),
+    hasActiveWorkout: sessions.some((s) => s.finishedAt === null),
+    settings,
+  };
+}
+
+export interface RoutineData {
+  templates: Template[];
+  exercises: Exercise[];
+}
+
+export async function loadRoutine(): Promise<RoutineData> {
+  const [templates, exercises] = await Promise.all([db.templates.toArray(), db.exercises.toArray()]);
+  return { templates, exercises };
 }

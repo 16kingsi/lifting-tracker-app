@@ -73,6 +73,52 @@ input {
   overflow: hidden;
 }
 
+/* A tab's scrolling content, above the navigation bar */
+.tab-page {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* Keeps a tab's heading and list from being squeezed instead of scrolling. */
+.tab-page > * {
+  flex: 0 0 auto;
+}
+
+.page-title {
+  padding: 24px 20px 12px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.bottom-nav {
+  display: grid;
+  flex: 0 0 auto;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  padding-bottom: env(safe-area-inset-bottom);
+  border-top: 1px solid var(--nav-border);
+  background: var(--nav-bg);
+}
+
+.bottom-nav__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 72px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.bottom-nav__item[aria-current='page'] {
+  color: var(--accent);
+  font-weight: 600;
+}
+
 /* A message that replaces the screen when something is wrong */
 .notice {
   display: flex;

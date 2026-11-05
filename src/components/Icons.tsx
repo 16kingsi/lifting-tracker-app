@@ -107,6 +107,63 @@ export const TimerIcon = ({ size = 18 }: IconProps) => (
   </Stroke>
 );
 
+export const ChevronUpIcon = ({ size = 18, width = 2.4 }: IconProps & { width?: number }) => (
+  <Stroke size={size} width={width}>
+    <path d="m6 15 6-6 6 6" />
+  </Stroke>
+);
+
+export const ChevronDownIcon = ({ size = 18, width = 2.4 }: IconProps & { width?: number }) => (
+  <Stroke size={size} width={width}>
+    <path d="m6 9 6 6 6-6" />
+  </Stroke>
+);
+
+export const HomeIcon = ({ size = 24 }: IconProps) => (
+  <Stroke size={size}>
+    <path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" />
+  </Stroke>
+);
+
+export const ClockIcon = ({ size = 24 }: IconProps) => (
+  <Stroke size={size}>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 7v5l3 2" />
+  </Stroke>
+);
+
+export const ListIcon = ({ size = 24 }: IconProps) => (
+  <Stroke size={size}>
+    <path d="M9 6h11" />
+    <path d="M9 12h11" />
+    <path d="M9 18h11" />
+    <path d="M4 6h.01" />
+    <path d="M4 12h.01" />
+    <path d="M4 18h.01" />
+  </Stroke>
+);
+
+export const SlidersIcon = ({ size = 24 }: IconProps) => (
+  <Stroke size={size}>
+    <path d="M4 21v-7" />
+    <path d="M4 10V3" />
+    <path d="M12 21v-9" />
+    <path d="M12 8V3" />
+    <path d="M20 21v-5" />
+    <path d="M20 12V3" />
+    <path d="M2 14h4" />
+    <path d="M10 8h4" />
+    <path d="M18 16h4" />
+  </Stroke>
+);
+
+export const PhoneIcon = ({ size = 22 }: IconProps) => (
+  <Stroke size={size}>
+    <rect x="6" y="2" width="12" height="20" rx="2" />
+    <path d="M11 18h2" />
+  </Stroke>
+);
+
 export const SearchIcon = ({ size = 20 }: IconProps) => (
   <Stroke size={size}>
     <circle cx="11" cy="11" r="7" />

@@ -1,0 +1,128 @@
+.history {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 16px 16px;
+}
+
+.history__empty {
+  padding: 4px;
+  color: var(--text-muted);
+  font-size: 15px;
+}
+
+.history__month {
+  margin: 4px 4px 2px;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.session {
+  overflow: hidden;
+  border-radius: 16px;
+  background: var(--surface);
+}
+
+.session__summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 68px;
+  padding: 0 14px;
+  text-align: left;
+}
+
+.session__text {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.session__date {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.session__meta {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.session__chevron {
+  display: flex;
+  color: var(--text-muted);
+}
+
+.session__chevron--open {
+  transform: rotate(180deg);
+}
+
+.session__body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 14px 14px;
+  border-top: 1px solid var(--border);
+}
+
+.session__exercise {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.session__exercise-name {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.session__sets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Taller than the mockup's 32px, because here they can be tapped. */
+.set-chip {
+  display: flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.set-chip--add {
+  justify-content: center;
+  width: 44px;
+  padding: 0;
+  border: 1.5px dashed var(--border-dashed);
+  background: none;
+  color: var(--text-soft);
+}
+
+.session__note {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-style: italic;
+}
+
+.session__hint {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.session__actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}

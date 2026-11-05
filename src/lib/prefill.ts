@@ -24,3 +24,11 @@ export function prefill({ exerciseType, todaySets, lastTimeSets, defaultUnit }: 
   }
   return draft;
 }
+
+// The entry panel's values for changing a set that's already logged. Fields the set
+// doesn't use keep their values from `base`.
+export function draftFromSet(set: LoggedSet, base: Draft): Draft {
+  return set.kind === 'weight'
+    ? { ...base, reps: set.reps, weight: set.weightValue, unit: set.weightUnit, note: set.note }
+    : { ...base, seconds: set.durationSec, note: set.note };
+}

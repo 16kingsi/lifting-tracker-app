@@ -3,7 +3,7 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import { Loading } from './components/Loading';
 import { getActiveSession } from './db/queries';
 import { navigate, usePath } from './router';
-import { HomeScreen } from './screens/Home/HomeScreen';
+import { TabScreen } from './screens/TabScreen';
 import { WorkoutScreen } from './screens/Workout/WorkoutScreen';
 
 export function App() {
@@ -20,7 +20,7 @@ export function App() {
 
   return (
     <ErrorBoundary>
-      {!ready ? <Loading /> : path === '/workout' ? <WorkoutScreen /> : <HomeScreen />}
+      {!ready ? <Loading /> : path === '/workout' ? <WorkoutScreen /> : <TabScreen path={path} />}
     </ErrorBoundary>
   );
 }

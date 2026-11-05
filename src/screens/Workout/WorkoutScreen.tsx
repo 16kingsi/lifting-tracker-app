@@ -7,8 +7,9 @@ import { getLastTime, loadActiveWorkout, type ActiveWorkout } from '../../db/que
 import { useData } from '../../db/useData';
 import { finishSession, setCurrentIndex } from '../../db/workouts';
 import { formatDuration } from '../../lib/format';
+import { elapsedMs } from '../../lib/sessionTime';
 import { leaveScreen, replacePath, useBackStep } from '../../router';
-import type { Exercise } from '../../types';
+import type { Exercise, Session } from '../../types';
 import { ExerciseView } from './ExerciseView';
 import './workout.css';
 
@@ -42,20 +43,21 @@ function WorkoutView({ workout }: { workout: ActiveWorkout }) {
   // The phone's Back button goes to the previous exercise, then Home from the first.
   useBackStep(index > 0, () => setCurrentIndex(session.id, index - 1));
 
-  async function finish() {
-    await finishSession(session.id);
-    leaveScreen();
+  function finish() {
+    // A workout with no sets isn't saved, so it has no page in History to show.
+    leaveScreen(sets.length > 0 ? `/history/${session.id}` : undefined);
+    finishSession(session);
   }
 
   return (
     <div className="screen workout">
       <header className="workout-header">
-        <button aria-label="Leave workout" className="icon-button" onClick={leaveScreen}>
+        <button aria-label="Leave workout" className="icon-button" onClick={() => leaveScreen()}>
           <CloseIcon />
         </button>
         <div className="workout-header__info">
           <span className="workout-header__day">Day {session.templateId}</span>
-          <ElapsedTime since={session.startedAt} />
+          <ElapsedTime session={session} />
         </div>
         <button
           className={`finish-button ${isLastExercise ? 'finish-button--filled' : ''}`}
@@ -122,10 +124,12 @@ function WorkoutView({ workout }: { workout: ActiveWorkout }) {
   );
 }
 
-function ElapsedTime({ since }: { since: number }) {
+function ElapsedTime({ session }: { session: Session }) {
   const now = useNow(1000);
   return (
-    <span className="workout-header__elapsed mono">{formatDuration((now - since) / 1000)} elapsed</span>
+    <span className="workout-header__elapsed mono">
+      {formatDuration(elapsedMs(session, now) / 1000)} elapsed
+    </span>
   );
 }
 

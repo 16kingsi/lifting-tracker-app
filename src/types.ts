@@ -37,6 +37,8 @@ export interface Session {
   finishedAt: number | null; // null means the workout is still in progress
   items: PlanItem[]; // this workout's own copy, so swaps can apply to today only
   currentIndex: number; // which exercise was on screen, for resuming
+  // Set while a finished workout is opened again, so it can keep its original date.
+  reopened?: { at: number; previousFinishedAt: number };
 }
 
 interface SetBase {

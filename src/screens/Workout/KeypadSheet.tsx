@@ -24,9 +24,16 @@ interface KeypadSheetProps {
   startField: KeypadField;
   draft: Draft;
   onDone: (values: Draft) => void;
+  // For changing saved sets, where Done saves straight away: Back and the dimmed area
+  // cancel instead, and a set with nothing in it can't be saved.
+  saved?: {
+    onCancel: () => void;
+    onDelete?: () => void;
+    deleteLabel?: string;
+  };
 }
 
-export function KeypadSheet({ type, setNumber, startField, draft, onDone }: KeypadSheetProps) {
+export function KeypadSheet({ type, setNumber, startField, draft, onDone, saved }: KeypadSheetProps) {
   const isTimed = type === 'timed';
   const [field, setField] = useState<NumberField>(
     startField === 'note' ? (isTimed ? 'seconds' : 'reps') : startField,
@@ -75,8 +82,13 @@ export function KeypadSheet({ type, setNumber, startField, draft, onDone }: Keyp
     });
   }
 
+  const isEmpty = parsePadText(isTimed ? texts.seconds : texts.reps) <= 0;
+
   return (
-    <Sheet label={`Enter ${FIELD_NAMES[field]} for set ${setNumber}`} onClose={done}>
+    <Sheet
+      label={`Enter ${FIELD_NAMES[field]} for set ${setNumber}`}
+      onClose={saved ? saved.onCancel : done}
+    >
       <div className="keypad__top">
         <h2 className="keypad__title">
           {isTimed ? 'Hold' : 'Set'} {setNumber} · {FIELD_NAMES[field]}
@@ -158,10 +170,16 @@ export function KeypadSheet({ type, setNumber, startField, draft, onDone }: Keyp
             Next field
           </button>
         )}
-        <button className="btn btn--primary" onClick={done}>
-          Done
+        <button className="btn btn--primary" disabled={saved && isEmpty} onClick={done}>
+          {saved ? 'Save' : 'Done'}
         </button>
       </div>
+
+      {saved?.onDelete && (
+        <button className="btn btn--danger" onClick={saved.onDelete}>
+          {saved.deleteLabel}
+        </button>
+      )}
     </Sheet>
   );
 }

@@ -1,0 +1,77 @@
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0 16px 16px;
+}
+
+.settings__section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settings__heading {
+  margin: 0 4px;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.settings__card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 16px;
+  background: var(--surface);
+}
+
+.settings__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.settings__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.settings__label {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.settings__detail {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.settings__units {
+  flex: 0 0 auto;
+  grid-auto-columns: 56px;
+}
+
+.settings__about {
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  color: var(--text-muted);
+}
+
+.settings__about svg {
+  flex: 0 0 auto;
+}
+
+.settings__about p {
+  color: var(--text-dim);
+  font-size: 14px;
+  line-height: 1.5;
+}

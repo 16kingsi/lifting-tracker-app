@@ -59,12 +59,12 @@ changing except the link at the top of this file.
 | `index.html` | The single page the app loads into |
 | `src/main.tsx` | Starts the app and loads the fonts and styles |
 | `src/App.tsx` | Picks which screen to show |
-| `src/router.ts` | Tracks the current screen in the address (`#/workout`) |
+| `src/router.ts` | Tracks the current screen in the address (`#/workout`) and handles the phone's Back button |
 | `src/types.ts` | The shape of everything the app stores |
 | `src/lib/` | Plain logic with unit tests: weight conversion, pre-fill, rotation, formatting |
 | `src/db/` | The database: schema and versions, starter routine, reads and writes |
-| `src/components/` | Pieces shared between screens: icons, sheets, the lb/kg toggle |
-| `src/screens/` | One folder per screen, each with its own CSS |
+| `src/components/` | Pieces shared between screens: icons, sheets, the lb/kg toggle, the exercise picker |
+| `src/screens/` | One folder per screen, each with its own CSS. `TabScreen.tsx` holds the bottom navigation |
 | `src/styles/` | Colours (`tokens.css`) and shared styles (`app.css`) |
 | `public/icons/` | App icons |
 | `vite.config.ts` | Build settings, plus the PWA manifest and service worker |

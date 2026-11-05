@@ -1,7 +1,8 @@
 .home {
+  display: flex;
+  flex-direction: column;
   gap: 16px;
   padding: 24px 16px 16px;
-  overflow-y: auto;
 }
 
 .home__header {
@@ -96,4 +97,74 @@
 
 .home-card__timed {
   color: var(--text-muted);
+}
+
+.recent {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.recent__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px;
+}
+
+.recent__title {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.recent__all {
+  height: 44px;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.recent__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  padding: 0 12px;
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--text-faint);
+  text-align: left;
+}
+
+/* The small A or B badge, on Home and in History */
+.day-chip {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--surface-raised);
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.recent__text {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.recent__date {
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.recent__summary {
+  color: var(--text-muted);
+  font-size: 13px;
 }
