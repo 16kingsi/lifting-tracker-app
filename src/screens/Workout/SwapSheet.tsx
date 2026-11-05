@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { useLiveQuery } from 'dexie-react-hooks';
 import { CheckIcon, CloseIcon, PlusIcon, SearchIcon } from '../../components/Icons';
 import { Sheet } from '../../components/Sheet';
 import { getSwapOptions } from '../../db/queries';
+import { useData } from '../../db/useData';
 import { addExercise, swapExercise, type ExerciseChoice } from '../../db/workouts';
 import { formatShortDate, summarizeSets } from '../../lib/format';
 import type { Exercise, ExerciseType, Session } from '../../types';
@@ -16,7 +16,7 @@ interface SwapSheetProps {
 
 export function SwapSheet({ session, index, exercise, onClose }: SwapSheetProps) {
   const excludeIds = session.items.map((i) => i.exerciseId);
-  const options = useLiveQuery(() => getSwapOptions(excludeIds), [excludeIds.join()]) ?? [];
+  const options = useData(() => getSwapOptions(excludeIds), [excludeIds.join()]) ?? [];
 
   const [search, setSearch] = useState('');
   const [selectedId, setSelectedId] = useState<string | null>(null);

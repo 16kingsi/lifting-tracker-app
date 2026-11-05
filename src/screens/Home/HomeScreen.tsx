@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { useLiveQuery } from 'dexie-react-hooks';
 import { PlayIcon } from '../../components/Icons';
+import { Loading } from '../../components/Loading';
 import { Sheet } from '../../components/Sheet';
 import { useNow } from '../../components/useNow';
 import { loadHome, type HomeData } from '../../db/queries';
+import { useData } from '../../db/useData';
 import { discardSession, startSession } from '../../db/workouts';
 import { formatDate, formatDuration, formatLongDate } from '../../lib/format';
 import { nextTemplateId } from '../../lib/rotation';
@@ -14,8 +15,8 @@ import './home.css';
 // The start of the Home screen. Recent sessions, the backup banner and the bottom
 // navigation arrive in later stages.
 export function HomeScreen() {
-  const home = useLiveQuery(loadHome);
-  if (!home) return <div className="screen" />;
+  const home = useData(loadHome);
+  if (!home) return <Loading />;
 
   return (
     <div className="screen home">

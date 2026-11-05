@@ -73,6 +73,27 @@ input {
   overflow: hidden;
 }
 
+/* A message that replaces the screen when something is wrong */
+.notice {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 48px 20px;
+}
+
+.notice__title {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.notice__text {
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--text-soft);
+}
+
 /* Buttons */
 .btn {
   display: flex;

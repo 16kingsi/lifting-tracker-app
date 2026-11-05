@@ -1,26 +1,31 @@
 import { useEffect, useState } from 'react';
-import { useLiveQuery } from 'dexie-react-hooks';
 import { ChevronLeftIcon, ChevronRightIcon, CloseIcon } from '../../components/Icons';
+import { Loading } from '../../components/Loading';
 import { Sheet } from '../../components/Sheet';
 import { useNow } from '../../components/useNow';
 import { getLastTime, loadActiveWorkout, type ActiveWorkout } from '../../db/queries';
+import { useData } from '../../db/useData';
 import { finishSession, setCurrentIndex } from '../../db/workouts';
 import { formatDuration } from '../../lib/format';
-import { navigate } from '../../router';
+import { leaveScreen, replacePath, useBackStep } from '../../router';
 import type { Exercise } from '../../types';
 import { ExerciseView } from './ExerciseView';
 import './workout.css';
 
 export function WorkoutScreen() {
-  const workout = useLiveQuery(loadActiveWorkout);
-  const [confirmingFinish, setConfirmingFinish] = useState(false);
+  const workout = useData(loadActiveWorkout);
 
   // No workout in progress (it was just finished, for example), so go Home.
   useEffect(() => {
-    if (workout === null) navigate('/');
+    if (workout === null) replacePath('/');
   }, [workout]);
 
-  if (!workout) return <div className="screen" />;
+  if (!workout) return <Loading />;
+  return <WorkoutView workout={workout} />;
+}
+
+function WorkoutView({ workout }: { workout: ActiveWorkout }) {
+  const [confirmingFinish, setConfirmingFinish] = useState(false);
 
   const { session, exercisesById, sets } = workout;
   const index = Math.min(session.currentIndex, session.items.length - 1);
@@ -34,15 +39,18 @@ export function WorkoutScreen() {
     return sum + Math.min(logged, i.targetSets);
   }, 0);
 
+  // The phone's Back button goes to the previous exercise, then Home from the first.
+  useBackStep(index > 0, () => setCurrentIndex(session.id, index - 1));
+
   async function finish() {
     await finishSession(session.id);
-    navigate('/');
+    leaveScreen();
   }
 
   return (
     <div className="screen workout">
       <header className="workout-header">
-        <button aria-label="Leave workout" className="icon-button" onClick={() => navigate('/')}>
+        <button aria-label="Leave workout" className="icon-button" onClick={leaveScreen}>
           <CloseIcon />
         </button>
         <div className="workout-header__info">
@@ -129,7 +137,7 @@ interface ExerciseLoaderProps {
 
 // Waits for "last time" to load, so the entry panel can pre-fill from it.
 function ExerciseLoader({ workout, exercise, index }: ExerciseLoaderProps) {
-  const lastTime = useLiveQuery(() => getLastTime(exercise.id), [exercise.id]);
-  if (lastTime === undefined) return null;
+  const lastTime = useData(() => getLastTime(exercise.id), [exercise.id]);
+  if (lastTime === undefined) return <Loading />;
   return <ExerciseView workout={workout} exercise={exercise} index={index} lastTime={lastTime} />;
 }

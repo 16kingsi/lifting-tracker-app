@@ -406,17 +406,21 @@
 
 /* lb/kg toggle */
 .unit-toggle {
+  position: relative;
   display: flex;
   border: 1px solid var(--border-strong);
   background: var(--bg);
 }
 
 .unit-toggle__option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-weight: 700;
   color: var(--text-muted);
 }
 
-.unit-toggle__option[aria-pressed='true'] {
+.unit-toggle__option--active {
   background: var(--text);
   color: var(--bg);
 }
@@ -424,6 +428,13 @@
 .unit-toggle--small {
   padding: 2px;
   border-radius: 10px;
+}
+
+/* Looks 34px tall, as in the mockup, but takes taps across a taller area. */
+.unit-toggle--small::after {
+  content: '';
+  position: absolute;
+  inset: -8px 0;
 }
 
 .unit-toggle--small .unit-toggle__option {

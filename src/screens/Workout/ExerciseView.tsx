@@ -5,6 +5,7 @@ import { deleteSet, logSet, updateSet } from '../../db/workouts';
 import { formatDate, summarizeSets } from '../../lib/format';
 import type { LastTime } from '../../lib/lastTime';
 import { prefill } from '../../lib/prefill';
+import { useBackStep } from '../../router';
 import type { Draft, Exercise, LoggedSet } from '../../types';
 import { EntryPanel } from './EntryPanel';
 import { KeypadSheet, type KeypadField } from './KeypadSheet';
@@ -60,6 +61,10 @@ export function ExerciseView({ workout, exercise, index, lastTime }: ExerciseVie
     setSelectedId(null);
     setEditingId(null);
   }
+
+  // The phone's Back button cancels an edit, or closes a set's Edit and Delete buttons.
+  useBackStep(editingId !== null, () => resetEntry(todaySets));
+  useBackStep(selectedId !== null, () => setSelectedId(null));
 
   async function save(values: Draft) {
     const editing = todaySets.find((s) => s.id === editingId);

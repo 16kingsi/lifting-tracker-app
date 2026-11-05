@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { PauseIcon, PlayIcon, ResetIcon, StopIcon } from '../../components/Icons';
 import { useNow } from '../../components/useNow';
 import { formatDuration } from '../../lib/format';
+import { useBackStep } from '../../router';
 
 interface StopwatchProps {
   holdNumber: number;
@@ -21,6 +22,7 @@ export function Stopwatch({ holdNumber, goalSeconds, setRows, onLog, onManual }:
   const seconds = Math.floor(elapsedMs / 1000);
 
   useKeepScreenOn(running);
+  useBackStep(true, onManual);
 
   function reset() {
     setRunningSince(null);
