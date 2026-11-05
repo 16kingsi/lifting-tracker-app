@@ -9,11 +9,14 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
-    "preview:subpath": "tsc --noEmit && vite build --base=/lifting-tracker-app/ && vite preview --base=/lifting-tracker-app/ --port 4173"
+    "preview:subpath": "tsc --noEmit && vite build --base=/lifting-tracker-app/ && vite preview --base=/lifting-tracker-app/ --port 4173",
+    "test": "vitest run"
   },
   "dependencies": {
     "@fontsource/ibm-plex-mono": "^5.3.0",
     "@fontsource/ibm-plex-sans": "^5.3.0",
+    "dexie": "^4.4.7",
+    "dexie-react-hooks": "^4.4.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
   },
@@ -23,6 +26,7 @@
     "@vitejs/plugin-react": "^6.2.1",
     "typescript": "^7.0.2",
     "vite": "^8.3.5",
-    "vite-plugin-pwa": "^2.0.0"
+    "vite-plugin-pwa": "^2.0.0",
+    "vitest": "^5.1.0"
   }
 }

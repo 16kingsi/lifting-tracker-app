@@ -1,0 +1,149 @@
+// The icons from the design mockup, as small components.
+import type { ReactNode } from 'react';
+
+function Stroke({ size, width = 2, children }: { size: number; width?: number; children: ReactNode }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={width}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      {children}
+    </svg>
+  );
+}
+
+function Solid({ size, children }: { size: number; children: ReactNode }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      {children}
+    </svg>
+  );
+}
+
+type IconProps = { size?: number };
+
+export const CloseIcon = ({ size = 22 }: IconProps) => (
+  <Stroke size={size}>
+    <path d="M18 6 6 18" />
+    <path d="m6 6 12 12" />
+  </Stroke>
+);
+
+export const ChevronLeftIcon = ({ size = 24 }: IconProps) => (
+  <Stroke size={size} width={2.2}>
+    <path d="m15 18-6-6 6-6" />
+  </Stroke>
+);
+
+export const ChevronRightIcon = ({ size = 24 }: IconProps) => (
+  <Stroke size={size} width={2.2}>
+    <path d="m9 18 6-6-6-6" />
+  </Stroke>
+);
+
+export const SwapIcon = ({ size = 22 }: IconProps) => (
+  <Stroke size={size}>
+    <path d="M7 4 3 8l4 4" />
+    <path d="M3 8h14" />
+    <path d="m17 20 4-4-4-4" />
+    <path d="M21 16H7" />
+  </Stroke>
+);
+
+export const MinusIcon = ({ size = 26 }: IconProps) => (
+  <Stroke size={size} width={2.4}>
+    <path d="M5 12h14" />
+  </Stroke>
+);
+
+export const PlusIcon = ({ size = 26 }: IconProps) => (
+  <Stroke size={size} width={2.4}>
+    <path d="M5 12h14" />
+    <path d="M12 5v14" />
+  </Stroke>
+);
+
+export const CheckIcon = ({ size = 22, width = 2.4 }: IconProps & { width?: number }) => (
+  <Stroke size={size} width={width}>
+    <path d="M20 6 9 17l-5-5" />
+  </Stroke>
+);
+
+export const EditIcon = ({ size = 18 }: IconProps) => (
+  <Stroke size={size}>
+    <path d="M12 20h9" />
+    <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z" />
+  </Stroke>
+);
+
+export const TrashIcon = ({ size = 18 }: IconProps) => (
+  <Stroke size={size}>
+    <path d="M3 6h18" />
+    <path d="M8 6V4h8v2" />
+    <path d="M19 6l-1 14H6L5 6" />
+  </Stroke>
+);
+
+export const NoteIcon = ({ size = 22 }: IconProps) => (
+  <Stroke size={size}>
+    <path d="M4 4h16v12H8l-4 4z" />
+    <path d="M8 9h8" />
+    <path d="M8 12h5" />
+  </Stroke>
+);
+
+export const TimerIcon = ({ size = 18 }: IconProps) => (
+  <Stroke size={size}>
+    <circle cx="12" cy="13" r="8" />
+    <path d="M12 9v4" />
+    <path d="M10 2h4" />
+  </Stroke>
+);
+
+export const SearchIcon = ({ size = 20 }: IconProps) => (
+  <Stroke size={size}>
+    <circle cx="11" cy="11" r="7" />
+    <path d="m20 20-3.5-3.5" />
+  </Stroke>
+);
+
+export const BackspaceIcon = ({ size = 26 }: IconProps) => (
+  <Stroke size={size}>
+    <path d="M21 5H9l-6 7 6 7h12z" />
+    <path d="m17 9-6 6" />
+    <path d="m11 9 6 6" />
+  </Stroke>
+);
+
+export const ResetIcon = ({ size = 20 }: IconProps) => (
+  <Stroke size={size}>
+    <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />
+    <path d="M3 3v5h5" />
+  </Stroke>
+);
+
+export const PlayIcon = ({ size = 22 }: IconProps) => (
+  <Solid size={size}>
+    <path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5z" />
+  </Solid>
+);
+
+export const PauseIcon = ({ size = 20 }: IconProps) => (
+  <Solid size={size}>
+    <rect x="6" y="5" width="4" height="14" rx="1" />
+    <rect x="14" y="5" width="4" height="14" rx="1" />
+  </Solid>
+);
+
+export const StopIcon = ({ size = 22 }: IconProps) => (
+  <Solid size={size}>
+    <rect x="6" y="6" width="12" height="12" rx="2" />
+  </Solid>
+);

@@ -25,6 +25,7 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
+      - run: npm test
       # GitHub Pages serves the site from /<repo-name>/, so the repo name is
       # passed in here instead of being written into the code.
       - run: npm run build -- --base=/${{ github.event.repository.name }}/

@@ -12,6 +12,9 @@ import '@fontsource/ibm-plex-mono/latin-600.css';
 import './styles/tokens.css';
 import './styles/app.css';
 import { App } from './App';
+import { requestPersistentStorage } from './db/persist';
+
+requestPersistentStorage();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

@@ -1,3 +1,4 @@
+/* Base styles and the pieces shared between screens. */
 *,
 *::before,
 *::after {
@@ -11,6 +12,45 @@ body {
   color: var(--text);
   font-family: var(--font-sans);
   -webkit-text-size-adjust: 100%;
+  /* Stops pull-to-refresh from reloading the page mid-workout. */
+  overscroll-behavior: none;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-family: inherit;
+  cursor: pointer;
+  /* Stops a quick double tap on + or - from zooming the page. */
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:active:not(:disabled) {
+  filter: brightness(1.2);
+}
+
+button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+input {
+  font-family: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .mono {
@@ -18,59 +58,141 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
-/* Stage 1 placeholder screen */
-.hello {
+.visually-hidden {
+  position: absolute;
+  left: -9999px;
+}
+
+/* A whole screen, filling the phone. Wider windows get a centred column. */
+.screen {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  max-width: 480px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+/* Buttons */
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  border-radius: 16px;
+  font-weight: 700;
+}
+
+.btn--primary {
+  height: 64px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 19px;
+}
+
+.btn--outline {
+  height: 48px;
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  color: var(--text-soft);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.btn--raised {
+  height: 64px;
+  background: var(--surface-raised);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.btn--danger {
+  height: 48px;
+  border-radius: 12px;
+  background: var(--danger-bg);
+  color: var(--danger);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* Small uppercase section label */
+.eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Segmented control: lb/kg, Today only/Update Day A, and so on */
+.segmented {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--border-strong);
+  border-radius: 14px;
+  background: var(--bg);
+}
+
+.segmented__option {
+  height: 48px;
+  border-radius: 10px;
+  color: var(--text-muted);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.segmented__option[aria-checked='true'],
+.segmented__option[aria-pressed='true'] {
+  background: var(--text);
+  color: var(--bg);
+  font-weight: 700;
+}
+
+/* Sheet: a panel that slides over the current screen */
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: var(--backdrop);
+}
+
+.sheet {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  width: 100%;
   max-width: 480px;
-  margin: 0 auto;
-  padding: 48px 20px;
-}
-
-.hello__eyebrow {
-  margin: 0;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-
-.hello__title {
-  margin: 0;
-  font-size: 28px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-}
-
-.hello__text {
-  margin: 0;
-  font-size: 16px;
-  line-height: 1.45;
-  color: var(--text-soft);
-}
-
-.hello__status {
-  margin: 12px 0 0;
-  border-radius: 16px;
+  max-height: 100%;
+  padding: 10px 16px calc(16px + env(safe-area-inset-bottom));
+  overflow-y: auto;
+  border-top: 1px solid var(--border-strong);
+  border-radius: 24px 24px 0 0;
   background: var(--surface);
 }
 
-.hello__row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 56px;
-  padding: 0 16px;
+.sheet__handle {
+  flex: 0 0 auto;
+  align-self: center;
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border-dashed);
+}
+
+.sheet__title {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.sheet__text {
   font-size: 15px;
-}
-
-.hello__row + .hello__row {
-  border-top: 1px solid var(--border);
-}
-
-.hello__row dd {
-  margin: 0;
-  font-weight: 600;
+  line-height: 1.45;
+  color: var(--text-soft);
 }

@@ -1,0 +1,99 @@
+.home {
+  gap: 16px;
+  padding: 24px 16px 16px;
+  overflow-y: auto;
+}
+
+.home__header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 4px;
+}
+
+.home__date {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.home__title {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.home-card {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface);
+}
+
+.home-card__top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.home-card__label {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.home-card__meta {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.home-card__top .home-card__meta {
+  font-size: 13px;
+}
+
+.home-card__day {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.home-card__badge {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 34px;
+  font-weight: 600;
+}
+
+.home-card__name {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.home-card__exercises {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 15px;
+  color: var(--text-soft);
+}
+
+.home-card__timed {
+  color: var(--text-muted);
+}
