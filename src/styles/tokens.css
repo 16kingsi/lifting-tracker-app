@@ -1,0 +1,30 @@
+/* Colours and fonts taken from the design mockup. */
+:root {
+  --bg: #0e1013;
+  --surface: #17191d;
+  --surface-sunken: #15171b;
+  --surface-raised: #262a31;
+  --nav-bg: #121418;
+
+  --border: #262a31;
+  --border-strong: #2f343c;
+  --border-dashed: #3a4049;
+
+  --text: #f1f3f5;
+  --text-soft: #d5dae0;
+  --text-muted: #9ba3ae;
+  --text-faint: #7c8591;
+
+  --accent: #b8f04a;
+  --on-accent: #0e1013;
+
+  --warning: #ffc861;
+  --warning-bg: #1f1a10;
+  --warning-border: #4a3a16;
+
+  --danger: #ff9a9a;
+  --danger-bg: #2a1a1c;
+
+  --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
