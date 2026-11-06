@@ -75,3 +75,97 @@
   font-size: 14px;
   line-height: 1.5;
 }
+
+.settings__card--roomy {
+  gap: 12px;
+}
+
+.settings__row--baseline {
+  align-items: baseline;
+}
+
+.settings__value {
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: right;
+}
+
+.settings__value--overdue {
+  color: var(--warning);
+}
+
+.settings__subhead {
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.settings__intervals .segmented__option {
+  height: 44px;
+  font-size: 14px;
+}
+
+.settings__backup {
+  height: 56px;
+  font-size: 16px;
+}
+
+/* Export and import: one card, rows separated by hairlines */
+.settings__list {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 16px;
+  background: var(--surface);
+}
+
+.settings__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 60px;
+  padding: 8px 16px;
+  color: var(--text-dim);
+  text-align: left;
+}
+
+.settings__item + .settings__item {
+  border-top: 1px solid var(--border);
+}
+
+.settings__item .settings__label {
+  color: var(--text);
+}
+
+.settings__item svg {
+  flex: 0 0 auto;
+}
+
+.settings__message {
+  margin: 0 4px;
+}
+
+/* Import sheet */
+.import__title {
+  overflow-wrap: anywhere;
+}
+
+.import__option {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.import__heading {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.import__note {
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}

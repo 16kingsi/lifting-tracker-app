@@ -43,6 +43,7 @@ export function seedDatabase(tx: Transaction) {
     lastExportAt: null,
     firstRunAt: Date.now(),
     bannerDismissedAt: null,
+    workoutsSinceExport: 0,
   };
 
   tx.table('exercises').bulkAdd([...exercises, ...alternatives]);

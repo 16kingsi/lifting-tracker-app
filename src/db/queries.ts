@@ -113,15 +113,17 @@ export interface HomeData {
   exercisesById: Map<string, Exercise>;
   finished: Session[]; // completed workouts, newest first
   recent: FinishedWorkout[]; // the newest few, with their sets
+  settings: Settings;
 }
 
 const RECENT_COUNT = 3;
 
 export async function loadHome(): Promise<HomeData> {
-  const [sessions, templates, exercises] = await Promise.all([
+  const [sessions, templates, exercises, settings] = await Promise.all([
     db.sessions.toArray(),
     db.templates.toArray(),
     db.exercises.toArray(),
+    getSettings(),
   ]);
 
   const active = sessions.find((s) => s.finishedAt === null) ?? null;
@@ -136,6 +138,7 @@ export async function loadHome(): Promise<HomeData> {
       .filter((s) => s.finishedAt !== null)
       .sort((a, b) => (b.finishedAt ?? 0) - (a.finishedAt ?? 0)),
     recent: await getFinishedWorkouts(sessions, RECENT_COUNT),
+    settings,
   };
 }
 

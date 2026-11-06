@@ -119,7 +119,49 @@ export const ChevronDownIcon = ({ size = 18, width = 2.4 }: IconProps & { width?
   </Stroke>
 );
 
-export const ChartIcon = ({ size = 22 }: IconProps) => (
+export const ShareIcon = ({ size = 20 }: IconProps) => (
+  <Stroke size={size}>
+    <circle cx="18" cy="5" r="3" />
+    <circle cx="6" cy="12" r="3" />
+    <circle cx="18" cy="19" r="3" />
+    <path d="m8.6 13.5 6.8 4" />
+    <path d="m15.4 6.5-6.8 4" />
+  </Stroke>
+);
+
+export const DownloadIcon = ({ size = 22 }: IconProps) => (
+  <Stroke size={size}>
+    <path d="M12 3v12" />
+    <path d="m7 10 5 5 5-5" />
+    <path d="M5 21h14" />
+  </Stroke>
+);
+
+export const UploadIcon = ({ size = 22 }: IconProps) => (
+  <Stroke size={size}>
+    <path d="M12 15V3" />
+    <path d="m7 8 5-5 5 5" />
+    <path d="M5 21h14" />
+  </Stroke>
+);
+
+export const TableIcon = ({ size = 22 }: IconProps) => (
+  <Stroke size={size}>
+    <rect x="3" y="4" width="18" height="16" rx="2" />
+    <path d="M3 10h18" />
+    <path d="M9 4v16" />
+  </Stroke>
+);
+
+export const WarningIcon = ({ size = 20 }: IconProps) => (
+  <Stroke size={size}>
+    <path d="M12 9v4" />
+    <path d="M12 17h.01" />
+    <path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" />
+  </Stroke>
+);
+
+export const ChartIcon =({ size = 22 }: IconProps) => (
   <Stroke size={size}>
     <path d="M3 3v18h18" />
     <path d="m7 15 4-4 3 3 5-6" />

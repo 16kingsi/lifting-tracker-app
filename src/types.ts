@@ -11,6 +11,7 @@ export interface Settings {
   lastExportAt: number | null;
   firstRunAt: number;
   bannerDismissedAt: number | null;
+  workoutsSinceExport: number; // workouts finished since the last backup
 }
 
 export interface Exercise {

@@ -52,6 +52,25 @@ To host your own copy, fork the repo and set **Settings → Pages → Source** t
 **GitHub Actions**. The workflow reads the repo name by itself, so nothing else needs
 changing except the link at the top of this file.
 
+## Back up and restore
+
+Everything lives only on the phone, so keep a backup somewhere else.
+
+- **Back up:** Settings → **Back up now**. The phone's share sheet opens, so you can
+  save the file to Google Drive, email it to yourself and so on. Android may name it
+  `.txt` instead of `.json`; it imports either way. On a computer it downloads.
+- **Reminder:** Home shows a reminder once your chosen interval (Settings → Remind me
+  every) has passed with workouts not yet backed up.
+- **Restore or move to a new phone:** Settings → **Import data**, then pick the file.
+  A preview shows what's in it before anything changes. **Merge** only adds workouts
+  this phone doesn't have. **Replace** swaps everything for the backup.
+- **Spreadsheets:** **Export as CSV** gives one row per set. A CSV can be merged back
+  in too, but it doesn't hold the routine or settings, so it isn't a full backup.
+
+Backup files carry the data model's version (`src/db/version.ts`). When the data
+model changes, `src/db/schema.ts` upgrades the phone's database and `FILE_UPGRADES` in
+`src/lib/backupFile.ts` upgrades older files as they're imported.
+
 ## How the project is organized
 
 | Path | What it is |
@@ -61,8 +80,9 @@ changing except the link at the top of this file.
 | `src/App.tsx` | Picks which screen to show |
 | `src/router.ts` | Tracks the current screen in the address (`#/workout`) and handles the phone's Back button |
 | `src/types.ts` | The shape of everything the app stores |
-| `src/lib/` | Plain logic with unit tests: weight conversion, pre-fill, rotation, formatting |
-| `src/db/` | The database: schema and versions, starter routine, reads and writes |
+| `src/lib/` | Plain logic with unit tests: weight conversion, pre-fill, rotation, formatting, charts, backup files and CSV |
+| `src/db/` | The database: schema and versions, starter routine, reads and writes, backup and import |
+| `src/shareFile.ts` | Opens the phone's share sheet for an exported file, or downloads it |
 | `src/components/` | Pieces shared between screens: icons, sheets, the lb/kg toggle, the exercise picker |
 | `src/screens/` | One folder per screen, each with its own CSS. `TabScreen.tsx` holds the bottom navigation |
 | `src/styles/` | Colours (`tokens.css`) and shared styles (`app.css`) |

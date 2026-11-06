@@ -1,16 +1,19 @@
 import { useState } from 'react';
-import { ChevronRightIcon, PlayIcon } from '../../components/Icons';
+import { ChevronRightIcon, CloseIcon, PlayIcon, ShareIcon, WarningIcon } from '../../components/Icons';
 import { Loading } from '../../components/Loading';
 import { Sheet } from '../../components/Sheet';
 import { useNow } from '../../components/useNow';
 import { loadHome, type FinishedWorkout, type HomeData } from '../../db/queries';
 import { useData } from '../../db/useData';
+import { dismissBackupBanner } from '../../db/backup';
 import { discardSession, startSession } from '../../db/workouts';
+import { formatAgo, showBackupBanner } from '../../lib/backupReminder';
 import { formatDate, formatDuration, formatLongDate, plural } from '../../lib/format';
 import { nextTemplateId } from '../../lib/rotation';
 import { durationMinutes, elapsedMs } from '../../lib/sessionTime';
 import { navigate, replaceScreen } from '../../router';
-import type { Session, TemplateId } from '../../types';
+import type { Session, Settings, TemplateId } from '../../types';
+import { exportJson } from '../Settings/exportActions';
 import './home.css';
 
 export function HomeScreen() {
@@ -23,12 +26,52 @@ export function HomeScreen() {
         <p className="home__date">{formatLongDate(Date.now())}</p>
         <h1 className="home__title">Ready to lift</h1>
       </header>
+      {showBackupBanner(home.settings, Date.now()) && <BackupBanner settings={home.settings} />}
       {home.active ? (
         <ResumeCard session={home.active} setCount={home.activeSetCount} />
       ) : (
         <UpNextCard home={home} />
       )}
       {home.recent.length > 0 && <RecentSessions workouts={home.recent} />}
+    </div>
+  );
+}
+
+function BackupBanner({ settings }: { settings: Settings }) {
+  const [busy, setBusy] = useState(false);
+
+  async function backUp() {
+    setBusy(true);
+    try {
+      await exportJson(); // the banner goes away by itself once the backup is saved
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div role="status" className="backup-banner">
+      <WarningIcon />
+      <p className="backup-banner__text">
+        {settings.lastExportAt ? (
+          <>
+            Last backup: <strong>{formatAgo(settings.lastExportAt, Date.now())}</strong>
+          </>
+        ) : (
+          <strong>Not backed up yet</strong>
+        )}
+      </p>
+      <button className="backup-banner__action" disabled={busy} onClick={backUp}>
+        <ShareIcon size={18} />
+        Back up now
+      </button>
+      <button
+        aria-label="Dismiss backup reminder"
+        className="backup-banner__action backup-banner__dismiss"
+        onClick={dismissBackupBanner}
+      >
+        <CloseIcon size={20} />
+      </button>
     </div>
   );
 }

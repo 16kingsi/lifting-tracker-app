@@ -25,7 +25,7 @@ export async function startSession(templateId: TemplateId): Promise<void> {
 // Completes a workout. One with no logged sets is dropped instead, so an empty
 // workout doesn't appear in history or change which day is suggested next.
 export async function finishSession(session: Session): Promise<void> {
-  await db.transaction('rw', db.sessions, db.sets, async () => {
+  await db.transaction('rw', db.sessions, db.sets, db.settings, async () => {
     const setCount = await db.sets.where('sessionId').equals(session.id).count();
     if (setCount === 0) {
       await db.sessions.delete(session.id);
@@ -34,6 +34,13 @@ export async function finishSession(session: Session): Promise<void> {
         finishedAt: finishTime(session, Date.now()),
         reopened: undefined,
       });
+      // Counts towards the backup reminder.
+      await db.settings
+        .where('id')
+        .equals('settings')
+        .modify((settings) => {
+          settings.workoutsSinceExport += 1;
+        });
     }
   });
 }

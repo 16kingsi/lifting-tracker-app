@@ -168,3 +168,43 @@
   color: var(--text-muted);
   font-size: 13px;
 }
+
+/* Backup reminder */
+.backup-banner {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 4px 4px 14px;
+  border: 1px solid var(--warning-border);
+  border-radius: 14px;
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+
+.backup-banner > svg {
+  flex: 0 0 auto;
+}
+
+.backup-banner__text {
+  flex: 1 1 auto;
+  margin-left: 6px;
+  color: var(--warning-text);
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+.backup-banner__action {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 6px;
+  height: 48px;
+  padding: 0 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.backup-banner__dismiss {
+  color: var(--warning-quiet);
+}
