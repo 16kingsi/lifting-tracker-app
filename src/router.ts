@@ -58,8 +58,9 @@ export function leaveScreen(thenPath?: string) {
   window.history.go(window.history.state?.guard ? -2 : -1);
 }
 
-// Moves between the tabs, without adding to the history.
-export function switchTab(path: string) {
+// Shows a different screen in place of this one, without adding to the history.
+// Used to move between tabs.
+export function replaceScreen(path: string) {
   if (leaving) {
     leaveTo = path;
   } else if (window.history.state?.guard) {
@@ -145,9 +146,10 @@ export function useBackStep(active: boolean, onBack: () => void) {
   }, [active]);
 }
 
-// A workout opened straight from its address (the phone restoring the app, say) has
-// nothing beneath it to leave to, so give it Home.
-if (currentPath() === '/workout' && !window.history.state) {
+// A workout or chart opened straight from its address (the phone restoring the app,
+// say) has nothing beneath it to leave to, so give it Home.
+const openedPath = currentPath();
+if (/^\/(workout|progress\/)/.test(openedPath) && !window.history.state) {
   window.history.replaceState(null, '', '#/');
-  navigate('/workout');
+  navigate(openedPath);
 }

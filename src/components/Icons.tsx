@@ -119,7 +119,14 @@ export const ChevronDownIcon = ({ size = 18, width = 2.4 }: IconProps & { width?
   </Stroke>
 );
 
-export const HomeIcon = ({ size = 24 }: IconProps) => (
+export const ChartIcon = ({ size = 22 }: IconProps) => (
+  <Stroke size={size}>
+    <path d="M3 3v18h18" />
+    <path d="m7 15 4-4 3 3 5-6" />
+  </Stroke>
+);
+
+export const HomeIcon =({ size = 24 }: IconProps) => (
   <Stroke size={size}>
     <path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" />
   </Stroke>

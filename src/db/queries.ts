@@ -170,3 +170,39 @@ export async function loadRoutine(): Promise<RoutineData> {
   const [templates, exercises] = await Promise.all([db.templates.toArray(), db.exercises.toArray()]);
   return { templates, exercises };
 }
+
+export interface ProgressData {
+  exercise: Exercise | undefined;
+  sessions: Session[]; // finished workouts that include this exercise
+  sets: LoggedSet[]; // this exercise's sets from those workouts
+  inProgressSets: number; // sets logged today, which count once the workout is finished
+}
+
+export async function loadProgress(exerciseId: string): Promise<ProgressData> {
+  const [exercise, allSets] = await Promise.all([
+    db.exercises.get(exerciseId),
+    db.sets.where('exerciseId').equals(exerciseId).toArray(),
+  ]);
+  const found = await db.sessions.bulkGet([...new Set(allSets.map((s) => s.sessionId))]);
+  const sessions = found.filter((s) => s !== undefined);
+  const finishedIds = new Set(sessions.filter((s) => s.finishedAt !== null).map((s) => s.id));
+
+  return {
+    exercise,
+    sessions: sessions.filter((s) => finishedIds.has(s.id)),
+    sets: allSets.filter((s) => finishedIds.has(s.sessionId)),
+    inProgressSets: allSets.filter((s) => !finishedIds.has(s.sessionId)).length,
+  };
+}
+
+// Every exercise with at least one set in a finished workout, by name.
+export async function getLoggedExercises(): Promise<Exercise[]> {
+  const [exercises, sets, sessions] = await Promise.all([
+    db.exercises.toArray(),
+    db.sets.toArray(),
+    db.sessions.toArray(),
+  ]);
+  const finished = new Set(sessions.filter((s) => s.finishedAt !== null).map((s) => s.id));
+  const logged = new Set(sets.filter((s) => finished.has(s.sessionId)).map((s) => s.exerciseId));
+  return exercises.filter((e) => logged.has(e.id)).sort((a, b) => a.name.localeCompare(b.name));
+}

@@ -9,7 +9,7 @@ import { discardSession, startSession } from '../../db/workouts';
 import { formatDate, formatDuration, formatLongDate, plural } from '../../lib/format';
 import { nextTemplateId } from '../../lib/rotation';
 import { durationMinutes, elapsedMs } from '../../lib/sessionTime';
-import { navigate, switchTab } from '../../router';
+import { navigate, replaceScreen } from '../../router';
 import type { Session, TemplateId } from '../../types';
 import './home.css';
 
@@ -153,7 +153,7 @@ function RecentSessions({ workouts }: { workouts: FinishedWorkout[] }) {
     <section className="recent">
       <div className="recent__header">
         <h2 className="recent__title">Recent sessions</h2>
-        <button className="recent__all" onClick={() => switchTab('/history')}>
+        <button className="recent__all" onClick={() => replaceScreen('/history')}>
           See all
         </button>
       </div>
@@ -163,7 +163,7 @@ function RecentSessions({ workouts }: { workouts: FinishedWorkout[] }) {
           <button
             key={session.id}
             className="recent__row"
-            onClick={() => switchTab(`/history/${session.id}`)}
+            onClick={() => replaceScreen(`/history/${session.id}`)}
           >
             <span className="day-chip mono">{session.templateId}</span>
             <span className="recent__text">

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { ClockIcon, HomeIcon, ListIcon, SlidersIcon } from '../components/Icons';
-import { replacePath, switchTab, useBackStep } from '../router';
+import { replacePath, replaceScreen, useBackStep } from '../router';
 import { HistoryScreen } from './History/HistoryScreen';
 import { HomeScreen } from './Home/HomeScreen';
 import { RoutineScreen } from './Routine/RoutineScreen';
@@ -43,7 +43,7 @@ export function TabScreen({ path }: { path: string }) {
             className="bottom-nav__item"
             aria-current={tab === target ? 'page' : undefined}
             onClick={() => {
-              if (tab !== target) switchTab(target);
+              if (tab !== target) replaceScreen(target);
             }}
           >
             {icon}

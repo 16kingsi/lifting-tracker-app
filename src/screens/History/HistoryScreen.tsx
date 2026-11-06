@@ -1,15 +1,17 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Loading } from '../../components/Loading';
 import { loadHistory } from '../../db/queries';
 import { useData } from '../../db/useData';
 import { formatMonth } from '../../lib/format';
+import { forgetRememberedCard, takeRememberedCard } from './openCard';
 import { SessionCard } from './SessionCard';
 import './history.css';
 
 // `openId` is the workout to show open first, such as the one just finished.
 export function HistoryScreen({ openId }: { openId: string | null }) {
   const history = useData(loadHistory);
-  const [openCard, setOpenCard] = useState(openId);
+  const [openCard, setOpenCard] = useState(() => takeRememberedCard() ?? openId);
+  useEffect(forgetRememberedCard, []);
 
   if (!history) return <Loading />;
 

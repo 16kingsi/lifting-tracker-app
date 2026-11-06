@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronDownIcon, PlusIcon } from '../../components/Icons';
+import { ChartIcon, ChevronDownIcon, PlusIcon } from '../../components/Icons';
 import { Sheet } from '../../components/Sheet';
 import type { FinishedWorkout } from '../../db/queries';
 import {
@@ -9,13 +9,15 @@ import {
   reopenSession,
   updateSet,
 } from '../../db/workouts';
-import { formatDate, formatSet, plural } from '../../lib/format';
+import { formatDate, formatSet, formatTime, plural } from '../../lib/format';
 import { draftFromSet, prefill } from '../../lib/prefill';
 import { groupSets } from '../../lib/sessionGroups';
 import { durationMinutes } from '../../lib/sessionTime';
 import { navigate } from '../../router';
 import type { Draft, Exercise, ExerciseType, LoggedSet, Unit } from '../../types';
 import { KeypadSheet } from '../Workout/KeypadSheet';
+import { rememberOpenCard } from './openCard';
+import { TimesSheet } from './TimesSheet';
 
 // What the keypad is open for: changing a set, or adding one to an exercise.
 type SetEdit =
@@ -42,6 +44,7 @@ export function SessionCard({
   const { session, sets } = workout;
   const [setEdit, setSetEdit] = useState<SetEdit | null>(null);
   const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const [changingTimes, setChangingTimes] = useState(false);
 
   async function keepLogging() {
     if (await reopenSession(session.id)) navigate('/workout');
@@ -64,13 +67,32 @@ export function SessionCard({
 
       {open && (
         <div className="session__body">
+          <div className="session__when">
+            <span className="session__time">
+              {formatTime(session.startedAt)} – {formatTime(session.finishedAt ?? 0)}
+            </span>
+            <button className="session__change" onClick={() => setChangingTimes(true)}>
+              Change date &amp; time
+            </button>
+          </div>
+
           {groupSets(session, sets).map((group) => {
             const exercise = exercisesById.get(group.exerciseId);
             if (!exercise) return null;
             const notes = [...new Set(group.sets.map((s) => s.note).filter(Boolean))];
             return (
               <div key={group.exerciseId} className="session__exercise">
-                <h3 className="session__exercise-name">{exercise.name}</h3>
+                <button
+                  className="session__exercise-name"
+                  aria-label={`${exercise.name} progress chart`}
+                  onClick={() => {
+                    rememberOpenCard(session.id);
+                    navigate(`/progress/${exercise.id}`);
+                  }}
+                >
+                  {exercise.name}
+                  <ChartIcon size={16} />
+                </button>
                 <div className="session__sets">
                   {group.sets.map((set, i) => (
                     <button
@@ -124,6 +146,8 @@ export function SessionCard({
           onClose={() => setSetEdit(null)}
         />
       )}
+
+      {changingTimes && <TimesSheet session={session} onClose={() => setChangingTimes(false)} />}
 
       {confirmingDelete && (
         <Sheet label="Delete workout" onClose={() => setConfirmingDelete(false)}>

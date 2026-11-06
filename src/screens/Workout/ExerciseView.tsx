@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { SwapIcon } from '../../components/Icons';
+import { ChartIcon, SwapIcon } from '../../components/Icons';
 import type { ActiveWorkout } from '../../db/queries';
 import { deleteSet, logSet, updateSet } from '../../db/workouts';
 import { formatDate, summarizeSets } from '../../lib/format';
 import type { LastTime } from '../../lib/lastTime';
 import { draftFromSet, prefill } from '../../lib/prefill';
-import { useBackStep } from '../../router';
+import { navigate, useBackStep } from '../../router';
 import type { Draft, Exercise, LoggedSet } from '../../types';
 import { EntryPanel } from './EntryPanel';
 import { KeypadSheet, type KeypadField } from './KeypadSheet';
@@ -20,6 +20,9 @@ interface ExerciseViewProps {
   index: number;
   lastTime: LastTime | null;
 }
+
+// What was in the entry panel for each exercise, so leaving the screen doesn't lose it.
+const unloggedDrafts = new Map<string, Draft>();
 
 // Everything below the exercise name: last time, today's sets and the entry panel.
 export function ExerciseView({ workout, exercise, index, lastTime }: ExerciseViewProps) {
@@ -36,7 +39,8 @@ export function ExerciseView({ workout, exercise, index, lastTime }: ExerciseVie
       defaultUnit: settings.defaultUnit,
     });
 
-  const [draft, setDraft] = useState<Draft>(() => prefillFrom(todaySets));
+  const draftKey = `${session.id}:${exercise.id}`;
+  const [draft, setDraft] = useState<Draft>(() => unloggedDrafts.get(draftKey) ?? prefillFrom(todaySets));
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [keypadField, setKeypadField] = useState<KeypadField | null>(null);
@@ -63,6 +67,11 @@ export function ExerciseView({ workout, exercise, index, lastTime }: ExerciseVie
     setSelectedId(null);
     setEditingId(null);
   }
+
+  // Keeps the values not yet logged, for coming back from the chart or another exercise.
+  useEffect(() => {
+    if (editingId === null) unloggedDrafts.set(draftKey, draft);
+  }, [draftKey, draft, editingId]);
 
   // The phone's Back button cancels an edit, or closes a set's Edit and Delete buttons.
   useBackStep(editingId !== null, () => resetEntry(todaySets));
@@ -121,6 +130,13 @@ export function ExerciseView({ workout, exercise, index, lastTime }: ExerciseVie
             {lastTime ? summarizeSets(lastTimeSets) : 'No history yet'}
           </span>
         </div>
+        <button
+          aria-label="Progress chart"
+          className="icon-button"
+          onClick={() => navigate(`/progress/${exercise.id}`)}
+        >
+          <ChartIcon />
+        </button>
         <button
           aria-label="Swap or add exercise"
           className="icon-button"

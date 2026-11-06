@@ -77,9 +77,17 @@
 }
 
 .session__exercise-name {
-  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 36px;
   font-size: 15px;
   font-weight: 600;
+  text-align: left;
+}
+
+.session__exercise-name svg {
+  color: var(--text-faint);
 }
 
 .session__sets {
@@ -125,4 +133,72 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
+}
+
+.session__when {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: -4px;
+}
+
+.session__time {
+  color: var(--text-soft);
+  font-size: 14px;
+}
+
+.session__change {
+  height: 44px;
+  padding: 0 4px;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Date and time sheet */
+.times__row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.times__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.times__label {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.times__input {
+  width: 100%;
+  height: 52px;
+  padding: 0 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 16px;
+  /* Gives the phone's date and time pickers their dark look. */
+  color-scheme: dark;
+}
+
+.times__note,
+.times__error {
+  min-height: 20px;
+  font-size: 14px;
+}
+
+.times__note {
+  color: var(--text-muted);
+}
+
+.times__error {
+  color: var(--danger);
 }

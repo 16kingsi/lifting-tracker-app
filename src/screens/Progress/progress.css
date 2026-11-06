@@ -1,0 +1,262 @@
+.progress__header {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 4px;
+  height: 60px;
+  padding: 0 8px;
+}
+
+.progress__header .icon-button {
+  color: var(--text);
+}
+
+.progress__name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  height: 48px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.progress__name span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.progress__name svg {
+  flex: 0 0 auto;
+  color: var(--text-muted);
+}
+
+.progress__body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 0;
+  padding: 0 16px 16px;
+  overflow-y: auto;
+}
+
+.progress__body > * {
+  flex: 0 0 auto;
+}
+
+.progress__empty,
+.progress__note {
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.progress__note {
+  font-size: 13px;
+}
+
+.progress__metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: 3px;
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.progress__metric {
+  height: 44px;
+  border-radius: 9px;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.progress__metric[aria-pressed='true'] {
+  background: var(--text);
+  color: var(--bg);
+}
+
+.progress__card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 14px 12px;
+  border-radius: 18px;
+  background: var(--surface);
+}
+
+.progress__hero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.progress__hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.progress__hero-label {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.progress__hero-value {
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.progress__hero-unit {
+  color: var(--text-muted);
+  font-size: 18px;
+}
+
+.progress__change {
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: var(--surface-raised);
+  font-size: 13px;
+  font-weight: 600;
+  text-align: right;
+}
+
+/* The chart */
+.chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  touch-action: pan-y; /* sideways drags pick a workout; up and down still scroll */
+}
+
+.chart:focus-visible {
+  outline-offset: 4px;
+}
+
+.chart__grid path {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.chart__labels text {
+  fill: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.chart__crosshair {
+  stroke: var(--border-dashed);
+  stroke-width: 1;
+}
+
+.chart__line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* The ring in the card's colour keeps each dot clear of the line. */
+.chart__dot {
+  fill: var(--accent);
+  stroke: var(--surface);
+  stroke-width: 2;
+}
+
+.chart__dot--kg {
+  fill: var(--surface);
+  stroke: var(--accent);
+}
+
+.progress__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.progress__key {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.progress__ranges {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 2px;
+}
+
+.progress__range {
+  height: 44px;
+  padding: 0 12px;
+  border-radius: 8px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.progress__range[aria-pressed='true'] {
+  background: var(--surface-raised);
+  color: var(--text);
+}
+
+.progress__past {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.progress__past-title {
+  margin: 0 4px 2px;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.past-session {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 60px;
+  padding: 8px 14px;
+  border-radius: 14px;
+  background: var(--surface-sunken);
+}
+
+.past-session__date {
+  flex: 0 0 64px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.past-session__text {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.past-session__sets {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.past-session__sub {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.past-session__best {
+  flex: 0 0 auto;
+  color: var(--text-muted);
+  font-size: 13px;
+}

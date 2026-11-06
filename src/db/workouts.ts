@@ -46,6 +46,25 @@ export async function discardSession(sessionId: string): Promise<void> {
   });
 }
 
+// Moves a finished workout to a different date or time. Its sets move with it, so
+// they still fall within the workout.
+export async function changeWorkoutTimes(
+  session: Session,
+  startedAt: number,
+  finishedAt: number,
+): Promise<void> {
+  const shift = startedAt - session.startedAt;
+  await db.transaction('rw', db.sessions, db.sets, async () => {
+    await db.sessions.update(session.id, { startedAt, finishedAt });
+    await db.sets
+      .where('sessionId')
+      .equals(session.id)
+      .modify((set) => {
+        set.loggedAt += shift;
+      });
+  });
+}
+
 // Puts a finished workout back in progress, unless another one already is.
 export async function reopenSession(sessionId: string): Promise<boolean> {
   return db.transaction('rw', db.sessions, async () => {

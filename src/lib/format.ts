@@ -32,6 +32,11 @@ export function formatLongDate(timestamp: number): string {
   });
 }
 
+// "6:02 PM"
+export function formatTime(timestamp: number): string {
+  return new Date(timestamp).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+}
+
 // "October 2026"
 export function formatMonth(timestamp: number): string {
   return new Date(timestamp).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
