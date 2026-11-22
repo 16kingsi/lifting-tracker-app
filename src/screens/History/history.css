@@ -202,3 +202,64 @@
 .times__error {
   color: var(--danger);
 }
+
+/* Exercises page */
+.exercise-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 16px 16px;
+}
+
+.exercise-list__heading {
+  margin-top: 12px;
+}
+
+.exercise-list__note {
+  font-size: 13px;
+}
+
+.exercise-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 68px;
+  padding: 8px 8px 8px 14px;
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--text-faint);
+  text-align: left;
+}
+
+button.exercise-row {
+  padding-right: 12px;
+}
+
+.exercise-row--quiet {
+  min-height: 60px;
+  background: var(--surface-sunken);
+}
+
+.exercise-row__text {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.exercise-row__name {
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.exercise-row__meta {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.exercise-row__best {
+  color: var(--text-soft);
+  font-size: 13px;
+}

@@ -33,3 +33,24 @@ export async function setExerciseType(exerciseId: string, type: ExerciseType): P
 export async function setDefaultUnit(defaultUnit: Unit): Promise<void> {
   await db.settings.update('settings', { defaultUnit });
 }
+
+// Deletes an exercise that has never been logged and isn't in the routine or today's
+// workout. Returns false, changing nothing, if it turns out to be in use.
+export async function deleteUnusedExercise(exerciseId: string): Promise<boolean> {
+  return db.transaction('rw', [db.exercises, db.sets, db.templates, db.sessions], async () => {
+    const uses = (items: PlanItem[]) => items.some((i) => i.exerciseId === exerciseId);
+    const logged = await db.sets.where('exerciseId').equals(exerciseId).count();
+    const inRoutine = (await db.templates.toArray()).some((t) => uses(t.items));
+    const active = await db.sessions.filter((s) => s.finishedAt === null).first();
+    if (logged > 0 || inRoutine || (active && uses(active.items))) return false;
+
+    // Finished workouts may still list it as planned but skipped.
+    await db.sessions
+      .filter((s) => uses(s.items))
+      .modify((session) => {
+        session.items = session.items.filter((i) => i.exerciseId !== exerciseId);
+      });
+    await db.exercises.delete(exerciseId);
+    return true;
+  });
+}

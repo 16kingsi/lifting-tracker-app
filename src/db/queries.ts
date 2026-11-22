@@ -1,5 +1,6 @@
 // Functions that read from the database. Screens call these through useLiveQuery,
 // which re-runs them whenever the data they read changes.
+import { summarizeExercises, type ExerciseSummary } from '../lib/exerciseList';
 import { pickLastTime, type LastTime } from '../lib/lastTime';
 import type { Exercise, LoggedSet, Session, Settings, Template } from '../types';
 import { db } from './schema';
@@ -208,4 +209,15 @@ export async function getLoggedExercises(): Promise<Exercise[]> {
   const finished = new Set(sessions.filter((s) => s.finishedAt !== null).map((s) => s.id));
   const logged = new Set(sets.filter((s) => finished.has(s.sessionId)).map((s) => s.exerciseId));
   return exercises.filter((e) => logged.has(e.id)).sort((a, b) => a.name.localeCompare(b.name));
+}
+
+// Every exercise with a summary of its history, for the Exercises page in History.
+export async function loadExerciseList(): Promise<ExerciseSummary[]> {
+  const [exercises, sessions, sets, templates] = await Promise.all([
+    db.exercises.toArray(),
+    db.sessions.toArray(),
+    db.sets.toArray(),
+    db.templates.toArray(),
+  ]);
+  return summarizeExercises(exercises, sessions, sets, templates);
 }

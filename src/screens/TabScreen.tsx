@@ -26,7 +26,7 @@ export function TabScreen({ path }: { path: string }) {
     <div className="screen">
       <div className="tab-page" key={tab}>
         {tab === '/history' ? (
-          <HistoryScreen openId={path.split('/')[2] ?? null} />
+          <HistoryScreen detail={path.split('/')[2] ?? null} />
         ) : tab === '/routine' ? (
           <RoutineScreen />
         ) : tab === '/settings' ? (

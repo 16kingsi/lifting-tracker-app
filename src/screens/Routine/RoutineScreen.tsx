@@ -35,15 +35,15 @@ export function RoutineScreen() {
 
   return (
     <>
-      <header className="routine__header">
-        <h1 className="routine__title">Routine</h1>
-        <div role="tablist" aria-label="Workout day" className="routine__days">
+      <header className="page-header">
+        <h1 className="page-header__title">Routine</h1>
+        <div role="tablist" aria-label="Workout day" className="page-tabs">
           {DAYS.map((d) => (
             <button
               key={d}
               role="tab"
               aria-selected={day === d}
-              className="routine__day"
+              className="page-tabs__tab"
               onClick={() => {
                 setDay(d);
                 setOpenId(null);

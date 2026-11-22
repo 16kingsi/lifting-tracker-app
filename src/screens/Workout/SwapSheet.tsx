@@ -6,13 +6,16 @@ import { addExercise, swapExercise } from '../../db/workouts';
 import type { Exercise, Session } from '../../types';
 
 interface SwapSheetProps {
+  // swap: replace the current exercise, or add one after it.
+  // add: only add one, after the current exercise.
+  mode?: 'swap' | 'add';
   session: Session;
   index: number;
   exercise: Exercise;
   onClose: () => void;
 }
 
-export function SwapSheet({ session, index, exercise, onClose }: SwapSheetProps) {
+export function SwapSheet({ mode = 'swap', session, index, exercise, onClose }: SwapSheetProps) {
   const { choice, choiceName, picker } = useExercisePicker(session.items.map((i) => i.exerciseId));
   const [updateTemplate, setUpdateTemplate] = useState(false);
 
@@ -23,11 +26,15 @@ export function SwapSheet({ session, index, exercise, onClose }: SwapSheetProps)
   }
 
   return (
-    <Sheet label="Swap or add exercise" onClose={onClose} className="swap">
+    <Sheet label={mode === 'add' ? 'Add exercise' : 'Swap or add exercise'} onClose={onClose} className="swap">
       <div className="swap__header">
         <div className="swap__heading">
-          <h2 className="sheet__title">Swap {exercise.name}</h2>
-          <span className="swap__subtitle">Equipment taken? Pick a replacement.</span>
+          <h2 className="sheet__title">{mode === 'add' ? "Add to today's workout" : `Swap ${exercise.name}`}</h2>
+          <span className="swap__subtitle">
+            {mode === 'add'
+              ? 'Pick one from before, or type a new one.'
+              : 'Equipment taken? Pick a replacement.'}
+          </span>
         </div>
         <button aria-label="Close" className="icon-button" onClick={onClose}>
           <CloseIcon />
@@ -58,19 +65,31 @@ export function SwapSheet({ session, index, exercise, onClose }: SwapSheetProps)
         </div>
       </fieldset>
 
-      <div className="swap__actions">
-        <button
-          className="btn btn--primary swap__confirm"
-          disabled={!choice}
-          onClick={() => apply(swapExercise)}
-        >
-          {choiceName ? `Swap in ${choiceName}` : 'Pick an exercise'}
-        </button>
-        <button className="btn btn--outline" disabled={!choice} onClick={() => apply(addExercise)}>
-          <PlusIcon size={18} />
-          Add as an extra exercise instead
-        </button>
-      </div>
+      {mode === 'add' ? (
+        <div className="swap__actions">
+          <button
+            className="btn btn--primary swap__confirm"
+            disabled={!choice}
+            onClick={() => apply(addExercise)}
+          >
+            {choiceName ? `Add ${choiceName}` : 'Pick an exercise'}
+          </button>
+        </div>
+      ) : (
+        <div className="swap__actions">
+          <button
+            className="btn btn--primary swap__confirm"
+            disabled={!choice}
+            onClick={() => apply(swapExercise)}
+          >
+            {choiceName ? `Swap in ${choiceName}` : 'Pick an exercise'}
+          </button>
+          <button className="btn btn--outline" disabled={!choice} onClick={() => apply(addExercise)}>
+            <PlusIcon size={18} />
+            Add as an extra exercise instead
+          </button>
+        </div>
+      )}
     </Sheet>
   );
 }

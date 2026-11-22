@@ -119,6 +119,42 @@ input {
   font-weight: 600;
 }
 
+/* A tab's heading with a row of tabs under it (Routine's days, History's views) */
+.page-header {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px 20px 12px;
+}
+
+.page-header__title {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.page-tabs {
+  display: grid;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  padding: 4px;
+  border-radius: 14px;
+  background: var(--surface);
+}
+
+.page-tabs__tab {
+  height: 48px;
+  border-radius: 10px;
+  color: var(--text-muted);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.page-tabs__tab[aria-selected='true'] {
+  background: var(--text);
+  color: var(--bg);
+}
+
 /* A message that replaces the screen when something is wrong */
 .notice {
   display: flex;

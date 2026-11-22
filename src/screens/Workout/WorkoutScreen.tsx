@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ChevronLeftIcon, ChevronRightIcon, CloseIcon } from '../../components/Icons';
+import { ChevronLeftIcon, ChevronRightIcon, CloseIcon, PlusIcon } from '../../components/Icons';
 import { Loading } from '../../components/Loading';
 import { Sheet } from '../../components/Sheet';
 import { useNow } from '../../components/useNow';
@@ -11,6 +11,7 @@ import { elapsedMs } from '../../lib/sessionTime';
 import { leaveScreen, replacePath, useBackStep } from '../../router';
 import type { Exercise, Session } from '../../types';
 import { ExerciseView } from './ExerciseView';
+import { SwapSheet } from './SwapSheet';
 import './workout.css';
 
 export function WorkoutScreen() {
@@ -27,6 +28,7 @@ export function WorkoutScreen() {
 
 function WorkoutView({ workout }: { workout: ActiveWorkout }) {
   const [confirmingFinish, setConfirmingFinish] = useState(false);
+  const [adding, setAdding] = useState(false);
 
   const { session, exercisesById, sets } = workout;
   const index = Math.min(session.currentIndex, session.items.length - 1);
@@ -77,7 +79,12 @@ function WorkoutView({ workout }: { workout: ActiveWorkout }) {
           <ChevronLeftIcon />
         </button>
         <div className="exercise-nav__center">
-          <h1 className="exercise-nav__name">{exercise.name}</h1>
+          {/* Always two lines tall, so the arrows stay put between short and long names. */}
+          <div className="exercise-nav__title">
+            <h1 className={`exercise-nav__name ${exercise.name.length > 28 ? 'exercise-nav__name--long' : ''}`}>
+              {exercise.name}
+            </h1>
+          </div>
           <div className="exercise-nav__position">
             <span>
               Exercise {index + 1} of {session.items.length}
@@ -91,18 +98,34 @@ function WorkoutView({ workout }: { workout: ActiveWorkout }) {
             </span>
           </div>
         </div>
-        <button
-          aria-label="Next exercise"
-          className="exercise-nav__arrow"
-          disabled={isLastExercise}
-          onClick={() => setCurrentIndex(session.id, index + 1)}
-        >
-          <ChevronRightIcon />
-        </button>
+        {/* On the last exercise there's no next one, so this adds one instead. */}
+        {isLastExercise ? (
+          <button aria-label="Add exercise" className="exercise-nav__arrow" onClick={() => setAdding(true)}>
+            <PlusIcon size={24} />
+          </button>
+        ) : (
+          <button
+            aria-label="Next exercise"
+            className="exercise-nav__arrow"
+            onClick={() => setCurrentIndex(session.id, index + 1)}
+          >
+            <ChevronRightIcon />
+          </button>
+        )}
       </section>
 
       {/* The key gives each exercise a fresh entry panel when moving between them. */}
       <ExerciseLoader key={exercise.id} workout={workout} exercise={exercise} index={index} />
+
+      {adding && (
+        <SwapSheet
+          mode="add"
+          session={session}
+          index={index}
+          exercise={exercise}
+          onClose={() => setAdding(false)}
+        />
+      )}
 
       {confirmingFinish && (
         <Sheet label="Finish workout" onClose={() => setConfirmingFinish(false)}>

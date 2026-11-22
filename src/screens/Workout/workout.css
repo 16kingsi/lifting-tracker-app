@@ -79,12 +79,32 @@
   min-width: 0;
 }
 
+.exercise-nav__title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(26px * 1.15 * 2); /* two lines of the name */
+  max-width: 100%;
+}
+
 .exercise-nav__name {
+  display: -webkit-box;
+  overflow: hidden;
   font-size: 26px;
   font-weight: 700;
   line-height: 1.15;
   letter-spacing: -0.01em;
   text-align: center;
+  overflow-wrap: anywhere;
+  /* A name too long for two lines ends in "…". */
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+/* Long names are a little smaller, so more of them fit in the two lines. */
+.exercise-nav__name--long {
+  font-size: 21px;
 }
 
 .exercise-nav__position {
